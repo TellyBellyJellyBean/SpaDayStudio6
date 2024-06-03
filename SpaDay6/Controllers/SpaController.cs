@@ -40,7 +40,7 @@ namespace SpaDay6.Controllers
         }
 
         [HttpPost]
-        [Route("/spa")]
+        [Route("/spaMenu")]
         public IActionResult Menu(string name, string skintype, string manipedi)
         {
             List<string> facials = new List<string>()
