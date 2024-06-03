@@ -54,8 +54,12 @@ namespace SpaDay6.Controllers
                 if (CheckSkinType(skintype, facials[i]))
                 {
                     appropriateFacials.Add(facials[i]);
-                }
+                } 
             }
+            ViewBag.name = name;
+            ViewBag.skintype = skintype;
+            ViewBag.appropriateFacials = appropriateFacials;
+            ViewBag.manipedi = manipedi;
             return View();
         }
     }
