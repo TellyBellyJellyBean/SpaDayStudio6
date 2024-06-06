@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SpaDay6.Models;
+using SpaDay6.ViewModel;
+
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,9 +16,13 @@ namespace SpaDay6.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            return View();
+            // List<User> users = new List<User>(UserData.GetAll());
+            // return View(users);
+            AddUserViewModel addUserViewModel = new();
+            return View(addUserViewModel);
         }
 
+        [HttpGet("/add")]
         public IActionResult Add()
         {
             return View();
@@ -24,21 +30,34 @@ namespace SpaDay6.Controllers
 
         [HttpPost]
         [Route("/user")]
-        public IActionResult SubmitAddUserForm(User newUser, string verify)
+        public IActionResult SubmitAddUserForm(AddUserViewModel addUserViewModel)
         {
-            if (newUser.Password == verify)
+            if (ModelState.IsValid)
             {
-                ViewBag.user = newUser;
-                return View("Index");
+
+
+                if (addUserViewModel.Password == addUserViewModel.VerifyPassword)
+                {
+                    User newUser = new()
+                    {
+                        Username = addUserViewModel.Username,
+                        Password = addUserViewModel.Password,
+                        Email = addUserViewModel.Email
+                    };
+
+
+                    return View("Index", newUser);
+                }
+                else
+                {
+                    return View("Add", addUserViewModel);
+                }
             }
             else
             {
-                ViewBag.error = "Passwords do not match! Try again!";
-                ViewBag.userName = newUser.Username;
-                ViewBag.eMail = newUser.Email;
-                return View("Add");
+
+                return View("Add", addUserViewModel);
             }
         }
     }
 }
-
